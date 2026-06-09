@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { SectionTabs } from "@/components/SectionTabs";
 import { SectionReorder } from "@/components/SectionReorder";
 import { PracticeNotes } from "@/components/PracticeNotes";
+import { AudioFiles } from "@/components/AudioFiles";
 import { prisma } from "@/lib/prisma";
 
 async function getSong(id: string): Promise<Song | null> {
@@ -13,6 +14,7 @@ async function getSong(id: string): Promise<Song | null> {
     include: {
       sections: { orderBy: { order: "asc" } },
       practiceNotes: { orderBy: { createdAt: "desc" } },
+      audioFiles: { orderBy: { createdAt: "asc" } },
     },
   });
   if (!song) return null;
@@ -104,6 +106,10 @@ export default async function SongPage({
         >
           + Add section
         </Link>
+      </div>
+
+      <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+        <AudioFiles songId={song.id} initialFiles={song.audioFiles ?? []} />
       </div>
 
       <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800">

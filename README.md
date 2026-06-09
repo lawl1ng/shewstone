@@ -1,3 +1,16 @@
+# Shewstone
+
+Band practice app — manage songs, sections, setlists, and practice notes.
+
+## TODO
+
+- [ ] Song duration + setlist total runtime (useful for planning set lengths)
+- [ ] Reference link per song (YouTube/Spotify URL for the original recording)
+- [ ] Capo / tuning field alongside BPM and key
+- [ ] Practice session log (date, attendees, overall notes across the whole session)
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

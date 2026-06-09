@@ -1,5 +1,13 @@
 export type SongStatus = "PERFORMANCE_READY" | "GETTING_THERE" | "NEEDS_WORK";
 
+export interface AudioFile {
+  id: string;
+  songId: string;
+  name: string;
+  url: string;
+  createdAt: string;
+}
+
 export interface Song {
   id: string;
   title: string;
@@ -8,6 +16,7 @@ export interface Song {
   status: SongStatus;
   sections?: Section[];
   practiceNotes?: PracticeNote[];
+  audioFiles?: AudioFile[];
   createdAt: string;
   updatedAt: string;
 }
