@@ -7,11 +7,38 @@ export interface Song {
   key: string | null;
   status: SongStatus;
   sections?: Section[];
+  practiceNotes?: PracticeNote[];
   createdAt: string;
   updatedAt: string;
 }
 
-export type SongFormData = Omit<Song, "id" | "sections" | "createdAt" | "updatedAt">;
+export type SongFormData = Omit<Song, "id" | "status" | "sections" | "practiceNotes" | "createdAt" | "updatedAt">;
+
+export interface PracticeNote {
+  id: string;
+  songId: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface Setlist {
+  id: string;
+  title: string;
+  date: string | null;
+  songs?: SetlistSong[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SetlistSong {
+  id: string;
+  setlistId: string;
+  songId: string;
+  song?: Song;
+  order: number;
+}
+
+export type SetlistFormData = Pick<Setlist, "title" | "date">;
 
 export const SECTION_TYPES = [
   "intro",

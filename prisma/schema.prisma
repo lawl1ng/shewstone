@@ -7,18 +7,20 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model Song {
-  id        String    @id @default(cuid())
-  title     String
-  bpm       Int?
-  key       String?
-  status    Status    @default(NEEDS_WORK)
-  sections  Section[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String         @id @default(cuid())
+  title         String
+  bpm           Int?
+  key           String?
+  status        Status         @default(NEEDS_WORK)
+  sections      Section[]
+  setlistSongs  SetlistSong[]
+  practiceNotes PracticeNote[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Section {
@@ -35,6 +37,34 @@ model Section {
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Setlist {
+  id        String        @id @default(cuid())
+  title     String
+  date      DateTime?
+  songs     SetlistSong[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model SetlistSong {
+  id        String  @id @default(cuid())
+  setlistId String
+  setlist   Setlist @relation(fields: [setlistId], references: [id], onDelete: Cascade)
+  songId    String
+  song      Song    @relation(fields: [songId], references: [id], onDelete: Cascade)
+  order     Int     @default(0)
+
+  @@unique([setlistId, songId])
+}
+
+model PracticeNote {
+  id        String   @id @default(cuid())
+  songId    String
+  song      Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
 }
 
 enum Status {

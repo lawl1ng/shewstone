@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shewstone — Song Catalogue",
-  description: "Band song catalogue for practice",
+  title: "Shewstone",
+  description: "Band practice app",
 };
 
 export const viewport = {
@@ -34,9 +34,19 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
         <header className="border-b border-neutral-200 dark:border-neutral-800 px-4 sm:px-6 py-4">
-          <a href="/" className="text-lg font-semibold tracking-tight">
-            Shewstone
-          </a>
+          <nav className="flex items-center gap-6">
+            <a href="/" className="text-lg font-semibold tracking-tight">
+              Shewstone
+            </a>
+            <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
+              <a href="/" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                Songs
+              </a>
+              <a href="/setlists" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                Setlists
+              </a>
+            </div>
+          </nav>
         </header>
         <main className="flex-1 px-4 sm:px-6 py-6 sm:py-8 max-w-4xl mx-auto w-full">
           {children}

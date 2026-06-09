@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { recalcSongStatus } from "@/lib/songStatus";
 
 export async function POST(
   request: NextRequest,
@@ -30,5 +31,6 @@ export async function POST(
     },
   });
 
+  await recalcSongStatus(songId);
   return NextResponse.json(section, { status: 201 });
 }

@@ -1,6 +1,6 @@
-import { SongForm } from "@/components/SongForm";
+"use client";
 
-export const metadata = { title: "Add Song — Shewstone" };
+import { SongForm } from "@/components/SongForm";
 
 export default function NewSongPage() {
   return (

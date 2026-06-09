@@ -9,7 +9,10 @@ export async function GET(
     const { id } = await params;
     const song = await prisma.song.findUnique({
       where: { id },
-      include: { sections: { orderBy: { order: "asc" } } },
+      include: {
+        sections: { orderBy: { order: "asc" } },
+        practiceNotes: { orderBy: { createdAt: "desc" } },
+      },
     });
 
     if (!song) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -35,7 +38,6 @@ export async function PUT(
         title: body.title,
         bpm: body.bpm ?? null,
         key: body.key ?? null,
-        status: body.status,
       },
     });
 

@@ -4,6 +4,7 @@ import type { Song, Section } from "@/lib/types";
 import { StatusBadge } from "@/components/StatusBadge";
 import { SectionTabs } from "@/components/SectionTabs";
 import { SectionReorder } from "@/components/SectionReorder";
+import { PracticeNotes } from "@/components/PracticeNotes";
 
 async function getSong(id: string): Promise<Song | null> {
   const base =
@@ -100,6 +101,10 @@ export default async function SongPage({
         >
           + Add section
         </Link>
+      </div>
+
+      <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+        <PracticeNotes songId={song.id} initialNotes={song.practiceNotes ?? []} />
       </div>
 
       <div className="mt-8 pt-4 border-t border-neutral-200 dark:border-neutral-800">
