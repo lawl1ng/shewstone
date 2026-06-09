@@ -19,22 +19,40 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: songId } = await params;
-  const body = (await request.json()) as HandleUploadBody;
 
-  const json = await handleUpload({
-    body,
-    request,
-    onBeforeGenerateToken: async () => ({
-      allowedContentTypes: ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg", "audio/x-m4a", "audio/mp4"],
-      maximumSizeInBytes: 100 * 1024 * 1024, // 100 MB
-    }),
-    onUploadCompleted: async ({ blob }) => {
-      const name = decodeURIComponent(blob.pathname.split("/").pop() ?? blob.pathname);
-      await prisma.audioFile.create({
-        data: { songId, name, url: blob.url },
-      });
-    },
-  });
+  try {
+    const body = (await request.json()) as HandleUploadBody;
 
-  return NextResponse.json(json);
+    const json = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: [
+          "audio/mpeg",
+          "audio/mp3",
+          "audio/wav",
+          "audio/ogg",
+          "audio/x-m4a",
+          "audio/mp4",
+          "audio/aac",
+          "audio/x-wav",
+          "audio/flac",
+          "application/octet-stream",
+        ],
+        maximumSizeInBytes: 100 * 1024 * 1024,
+      }),
+      onUploadCompleted: async ({ blob }) => {
+        const name = decodeURIComponent(blob.pathname.split("/").pop() ?? blob.pathname);
+        await prisma.audioFile.create({
+          data: { songId, name, url: blob.url },
+        });
+      },
+    });
+
+    return NextResponse.json(json);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("POST /api/songs/[id]/audio error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

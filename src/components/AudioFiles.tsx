@@ -41,7 +41,12 @@ export function AudioFiles({
       const updated: AudioFile[] = await fetch(`/api/songs/${songId}/audio`).then((r) => r.json());
       setFiles(updated);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
+      const msg = err instanceof Error ? err.message : "Upload failed";
+      if (msg.includes("client token") || msg.includes("presigned")) {
+        setError("Upload not configured — check BLOB_READ_WRITE_TOKEN in Vercel project settings");
+      } else {
+        setError(msg);
+      }
     } finally {
       setUploading(false);
       setProgress(0);
