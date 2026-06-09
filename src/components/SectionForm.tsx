@@ -14,13 +14,15 @@ const TABS: { key: Tab; label: string }[] = [
   { key: "notes", label: "Notes" },
 ];
 
+const BASS_TAB_TEMPLATE = `G|------------------|\nD|------------------|\nA|------------------|\nE|------------------|`;
+
 const defaultForm: SectionFormData = {
   type: "verse",
   label: null,
   status: "NEEDS_WORK",
   lyrics: null,
   chords: null,
-  bassTab: null,
+  bassTab: BASS_TAB_TEMPLATE,
   notes: null,
   order: 0,
 };
@@ -32,7 +34,7 @@ function toFormData(section: Section): SectionFormData {
     status: section.status,
     lyrics: section.lyrics,
     chords: section.chords,
-    bassTab: section.bassTab,
+    bassTab: section.bassTab ?? BASS_TAB_TEMPLATE,
     notes: section.notes,
     order: section.order,
   };
@@ -93,7 +95,7 @@ export function SectionForm({
   }
 
   const inputClass =
-    "w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400";
+    "w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400";
   const labelClass =
     "block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1";
 
@@ -175,16 +177,16 @@ export function SectionForm({
       </div>
 
       <div>
-        <div className="flex gap-1 border-b border-neutral-200 dark:border-neutral-700 mb-3">
+        <div className="flex gap-1 mb-3">
           {TABS.map(({ key, label }) => (
             <button
               key={key}
               type="button"
               onClick={() => setActiveTab(key)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
                 activeTab === key
-                  ? "border border-b-0 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white -mb-px"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                  ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               }`}
             >
               {label}
@@ -193,13 +195,12 @@ export function SectionForm({
         </div>
         {activeTab === "bassTab" ? (
           <textarea
-            rows={10}
+            rows={6}
             wrap="off"
             className={`${inputClass} font-mono overflow-x-auto`}
             style={{ whiteSpace: "pre", resize: "vertical" }}
             value={form.bassTab ?? ""}
             onChange={(e) => set("bassTab", e.target.value || null)}
-            placeholder={`G|------------------|\nD|------------------|\nA|------------------|\nE|------------------|`}
           />
         ) : (
           <textarea
