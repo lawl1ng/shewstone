@@ -5,15 +5,18 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { SectionTabs } from "@/components/SectionTabs";
 import { SectionReorder } from "@/components/SectionReorder";
 import { PracticeNotes } from "@/components/PracticeNotes";
+import { prisma } from "@/lib/prisma";
 
 async function getSong(id: string): Promise<Song | null> {
-  const base =
-    process.env.NEXT_PUBLIC_BASE_URL ??
-    `http://localhost:${process.env.PORT ?? 3000}`;
-
-  const res = await fetch(`${base}/api/songs/${id}`, { cache: "no-store" });
-  if (!res.ok) return null;
-  return res.json();
+  const song = await prisma.song.findUnique({
+    where: { id },
+    include: {
+      sections: { orderBy: { order: "asc" } },
+      practiceNotes: { orderBy: { createdAt: "desc" } },
+    },
+  });
+  if (!song) return null;
+  return JSON.parse(JSON.stringify(song));
 }
 
 export default async function SongPage({
