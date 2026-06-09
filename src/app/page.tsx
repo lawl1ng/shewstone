@@ -6,6 +6,7 @@ import type { Song, SongStatus } from "@/lib/types";
 import { SongCard } from "@/components/SongCard";
 
 type FilterStatus = SongStatus | "ALL";
+type SortOption = "recent" | "title" | "readiness";
 
 const tabs: { label: string; value: FilterStatus; dot?: string }[] = [
   { label: "All", value: "ALL" },
@@ -14,16 +15,24 @@ const tabs: { label: string; value: FilterStatus; dot?: string }[] = [
   { label: "Performance Ready", value: "PERFORMANCE_READY", dot: "bg-green-500" },
 ];
 
+const sortOptions: { label: string; value: SortOption }[] = [
+  { label: "Recent", value: "recent" },
+  { label: "A–Z", value: "title" },
+  { label: "Readiness", value: "readiness" },
+];
+
 export default function HomePage() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterStatus>("ALL");
+  const [sort, setSort] = useState<SortOption>("recent");
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (filter !== "ALL") params.set("status", filter);
     if (search) params.set("search", search);
+    if (sort !== "recent") params.set("sort", sort);
 
     fetch(`/api/songs?${params}`)
       .then((r) => {
@@ -35,7 +44,7 @@ export default function HomePage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [search, filter]);
+  }, [search, filter, sort]);
 
   return (
     <div>
@@ -57,7 +66,7 @@ export default function HomePage() {
         className="w-full mb-4 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400"
       />
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-3">
         {tabs.map((tab) => (
           <button
             key={tab.value}
@@ -70,6 +79,23 @@ export default function HomePage() {
           >
             {tab.dot && <span className={`w-1.5 h-1.5 rounded-full ${tab.dot}`} />}
             {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 mb-6">
+        <span className="text-xs text-neutral-400 dark:text-neutral-500 mr-1">Sort:</span>
+        {sortOptions.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => setSort(opt.value)}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              sort === opt.value
+                ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+            }`}
+          >
+            {opt.label}
           </button>
         ))}
       </div>

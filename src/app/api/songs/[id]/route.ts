@@ -38,6 +38,10 @@ export async function PUT(
         title: body.title,
         bpm: body.bpm ?? null,
         key: body.key ?? null,
+        duration: body.duration ?? null,
+        referenceUrl: body.referenceUrl ?? null,
+        capo: body.capo ?? null,
+        tuning: body.tuning ?? null,
       },
     });
 

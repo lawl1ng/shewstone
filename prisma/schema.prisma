@@ -15,6 +15,10 @@ model Song {
   title         String
   bpm           Int?
   key           String?
+  duration      Int?
+  referenceUrl  String?
+  capo          Int?
+  tuning        String?
   status        Status         @default(NEEDS_WORK)
   sections      Section[]
   setlistSongs  SetlistSong[]
@@ -75,6 +79,15 @@ model PracticeNote {
   song      Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
   content   String
   createdAt DateTime @default(now())
+}
+
+model PracticeSession {
+  id        String   @id @default(cuid())
+  date      DateTime
+  attendees String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Status {

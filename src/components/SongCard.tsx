@@ -18,6 +18,11 @@ export function SongCard({ song }: { song: Song }) {
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500 dark:text-neutral-400">
         {song.bpm && <span>{song.bpm} BPM</span>}
         {song.key && <span>Key: {song.key}</span>}
+        {song.capo && <span>Capo {song.capo}</span>}
+        {song.tuning && <span>{song.tuning}</span>}
+        {song.duration && (
+          <span>{Math.floor(song.duration / 60)}:{(song.duration % 60).toString().padStart(2, "0")}</span>
+        )}
       </div>
     </Link>
   );

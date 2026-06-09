@@ -4,10 +4,23 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Song, SongFormData } from "@/lib/types";
 
+function parseDuration(str: string): number | null {
+  const m = str.match(/^(\d+):([0-5]\d)$/);
+  return m ? parseInt(m[1]) * 60 + parseInt(m[2]) : null;
+}
+
+function fmtDuration(seconds: number): string {
+  return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
+}
+
 const defaultForm: SongFormData = {
   title: "",
   bpm: null,
   key: null,
+  duration: null,
+  referenceUrl: null,
+  capo: null,
+  tuning: null,
 };
 
 function toFormData(song: Song): SongFormData {
@@ -15,6 +28,10 @@ function toFormData(song: Song): SongFormData {
     title: song.title,
     bpm: song.bpm,
     key: song.key,
+    duration: song.duration,
+    referenceUrl: song.referenceUrl,
+    capo: song.capo,
+    tuning: song.tuning,
   };
 }
 
@@ -23,6 +40,9 @@ export function SongForm({ song }: { song?: Song }) {
   const [form, setForm] = useState<SongFormData>(
     song ? toFormData(song) : defaultForm
   );
+  const [durationStr, setDurationStr] = useState<string>(() =>
+    song?.duration ? fmtDuration(song.duration) : ""
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +50,11 @@ export function SongForm({ song }: { song?: Song }) {
 
   function set<K extends keyof SongFormData>(key: K, value: SongFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handleDurationChange(str: string) {
+    setDurationStr(str);
+    set("duration", parseDuration(str));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -44,6 +69,10 @@ export function SongForm({ song }: { song?: Song }) {
       title: form.title,
       bpm: form.bpm ? Number(form.bpm) : null,
       key: form.key || null,
+      duration: form.duration,
+      referenceUrl: form.referenceUrl || null,
+      capo: form.capo ? Number(form.capo) : null,
+      tuning: form.tuning || null,
     };
 
     try {
@@ -75,7 +104,7 @@ export function SongForm({ song }: { song?: Song }) {
   }
 
   const inputClass =
-    "w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400";
+    "w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400";
   const labelClass =
     "block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1";
 
@@ -113,6 +142,52 @@ export function SongForm({ song }: { song?: Song }) {
             placeholder="e.g. A minor"
             value={form.key ?? ""}
             onChange={(e) => set("key", e.target.value || null)}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>Capo (fret)</label>
+          <input
+            type="number"
+            min={1}
+            max={12}
+            className={inputClass}
+            placeholder="e.g. 2"
+            value={form.capo ?? ""}
+            onChange={(e) =>
+              set("capo", e.target.value ? Number(e.target.value) : null)
+            }
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>Tuning</label>
+          <input
+            className={inputClass}
+            placeholder="e.g. Standard, Drop D"
+            value={form.tuning ?? ""}
+            onChange={(e) => set("tuning", e.target.value || null)}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>Duration (mm:ss)</label>
+          <input
+            className={inputClass}
+            placeholder="e.g. 3:45"
+            value={durationStr}
+            onChange={(e) => handleDurationChange(e.target.value)}
+          />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label className={labelClass}>Reference link</label>
+          <input
+            type="url"
+            className={inputClass}
+            placeholder="YouTube, Spotify, SoundCloud…"
+            value={form.referenceUrl ?? ""}
+            onChange={(e) => set("referenceUrl", e.target.value || null)}
           />
         </div>
       </div>

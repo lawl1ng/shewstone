@@ -49,9 +49,26 @@ export default async function SongPage({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-500 dark:text-neutral-400 mb-8">
-        {song.bpm && <span>{song.bpm} BPM</span>}
-        {song.key && <span>Key: {song.key}</span>}
+      <div className="mb-8 space-y-2">
+        <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-neutral-500 dark:text-neutral-400">
+          {song.bpm && <span>{song.bpm} BPM</span>}
+          {song.key && <span>Key: {song.key}</span>}
+          {song.capo && <span>Capo {song.capo}</span>}
+          {song.tuning && <span>{song.tuning}</span>}
+          {song.duration && (
+            <span>{Math.floor(song.duration / 60)}:{(song.duration % 60).toString().padStart(2, "0")}</span>
+          )}
+        </div>
+        {song.referenceUrl && (
+          <a
+            href={song.referenceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-blue-600 dark:text-blue-400 hover:underline break-all"
+          >
+            {song.referenceUrl}
+          </a>
+        )}
       </div>
 
       <div className="space-y-4">

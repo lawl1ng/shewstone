@@ -45,6 +45,9 @@ export default function RootLayout({
               <a href="/setlists" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
                 Setlists
               </a>
+              <a href="/sessions" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                Sessions
+              </a>
             </div>
           </nav>
         </header>

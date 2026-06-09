@@ -7,13 +7,21 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") as Status | null;
     const search = searchParams.get("search") ?? "";
+    const sort = searchParams.get("sort") ?? "recent";
+
+    const orderBy =
+      sort === "title"
+        ? { title: "asc" as const }
+        : sort === "readiness"
+        ? { status: "asc" as const }
+        : { updatedAt: "desc" as const };
 
     const songs = await prisma.song.findMany({
       where: {
         ...(status ? { status } : {}),
         ...(search ? { title: { contains: search } } : {}),
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy,
     });
 
     return NextResponse.json(songs);
@@ -32,6 +40,10 @@ export async function POST(request: NextRequest) {
         title: body.title,
         bpm: body.bpm ?? null,
         key: body.key ?? null,
+        duration: body.duration ?? null,
+        referenceUrl: body.referenceUrl ?? null,
+        capo: body.capo ?? null,
+        tuning: body.tuning ?? null,
         status: body.status ?? "NEEDS_WORK",
       },
     });

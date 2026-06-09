@@ -14,6 +14,12 @@ function formatDate(iso: string) {
   });
 }
 
+function fmtDuration(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 export default function SetlistPage() {
   const { id } = useParams<{ id: string }>();
   const [setlist, setSetlist] = useState<Setlist | null>(null);
@@ -87,6 +93,14 @@ export default function SetlistPage() {
               {formatDate(setlist.date)}
             </p>
           )}
+          {(() => {
+            const total = entries.reduce((sum, e) => sum + (e.song?.duration ?? 0), 0);
+            return total > 0 ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                Runtime: {fmtDuration(total)}
+              </p>
+            ) : null;
+          })()}
         </div>
         <Link
           href={`/setlists/${id}/edit`}

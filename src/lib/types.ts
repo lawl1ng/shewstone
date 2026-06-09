@@ -13,6 +13,10 @@ export interface Song {
   title: string;
   bpm: number | null;
   key: string | null;
+  duration: number | null;
+  referenceUrl: string | null;
+  capo: number | null;
+  tuning: string | null;
   status: SongStatus;
   sections?: Section[];
   practiceNotes?: PracticeNote[];
@@ -21,7 +25,18 @@ export interface Song {
   updatedAt: string;
 }
 
-export type SongFormData = Omit<Song, "id" | "status" | "sections" | "practiceNotes" | "createdAt" | "updatedAt">;
+export type SongFormData = Omit<Song, "id" | "status" | "sections" | "practiceNotes" | "audioFiles" | "createdAt" | "updatedAt">;
+
+export interface PracticeSession {
+  id: string;
+  date: string;
+  attendees: string | null;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PracticeSessionFormData = Omit<PracticeSession, "id" | "createdAt" | "updatedAt">;
 
 export interface PracticeNote {
   id: string;

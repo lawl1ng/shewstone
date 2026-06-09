@@ -4,11 +4,11 @@ Band practice app — manage songs, sections, setlists, and practice notes.
 
 ## TODO
 
-- [ ] Song duration + setlist total runtime (useful for planning set lengths)
-- [ ] Reference link per song (YouTube/Spotify URL for the original recording)
-- [ ] Capo / tuning field alongside BPM and key
-- [ ] Practice session log (date, attendees, overall notes across the whole session)
-- [ ] Sort songs by readiness or alphabetically on the songs list
+- [x] Song duration + setlist total runtime (useful for planning set lengths)
+- [x] Reference link per song (YouTube/Spotify URL for the original recording)
+- [x] Capo / tuning field alongside BPM and key
+- [x] Practice session log (date, attendees, overall notes across the whole session)
+- [x] Sort songs by readiness or alphabetically on the songs list
 
 ---
 
