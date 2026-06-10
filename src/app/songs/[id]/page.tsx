@@ -7,6 +7,7 @@ import { SectionTabs } from "@/components/SectionTabs";
 import { SectionReorder } from "@/components/SectionReorder";
 import { PracticeNotes } from "@/components/PracticeNotes";
 import { AudioFiles } from "@/components/AudioFiles";
+import { AutoScroll } from "@/components/AutoScroll";
 import { prisma } from "@/lib/prisma";
 
 async function getSong(id: string): Promise<Song | null> {
@@ -142,6 +143,8 @@ export default async function SongPage({
           ← Back to songs
         </Link>
       </div>
+
+      {sections.length > 0 && <AutoScroll />}
     </div>
   );
 }
