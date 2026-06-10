@@ -52,6 +52,26 @@ export async function PUT(
   }
 }
 
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+
+    const song = await prisma.song.update({
+      where: { id },
+      data: { status: body.status },
+    });
+
+    return NextResponse.json(song);
+  } catch (err) {
+    console.error("PATCH /api/songs/[id] error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

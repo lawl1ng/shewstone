@@ -2,7 +2,18 @@ import Link from "next/link";
 import type { Song } from "@/lib/types";
 import { StatusBadge } from "./StatusBadge";
 
+function formatRelative(iso: string) {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (days <= 0) return "Practiced today";
+  if (days === 1) return "Practiced yesterday";
+  if (days < 7) return `Practiced ${days}d ago`;
+  if (days < 30) return `Practiced ${Math.floor(days / 7)}w ago`;
+  return `Practiced ${Math.floor(days / 30)}mo ago`;
+}
+
 export function SongCard({ song }: { song: Song }) {
+  const lastPracticed = song.practiceNotes?.[0]?.createdAt;
+
   return (
     <Link
       href={`/songs/${song.id}`}
@@ -23,6 +34,7 @@ export function SongCard({ song }: { song: Song }) {
         {song.duration && (
           <span>{Math.floor(song.duration / 60)}:{(song.duration % 60).toString().padStart(2, "0")}</span>
         )}
+        {lastPracticed && <span>{formatRelative(lastPracticed)}</span>}
       </div>
     </Link>
   );

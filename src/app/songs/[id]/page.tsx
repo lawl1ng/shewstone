@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Song, Section } from "@/lib/types";
 import { StatusBadge } from "@/components/StatusBadge";
+import { SongStatusToggle } from "@/components/SongStatusToggle";
 import { SectionTabs } from "@/components/SectionTabs";
 import { SectionReorder } from "@/components/SectionReorder";
 import { PracticeNotes } from "@/components/PracticeNotes";
@@ -39,7 +40,7 @@ export default async function SongPage({
           <h1 className="text-2xl font-bold">{song.title}</h1>
         </div>
         <div className="flex items-center gap-3 shrink-0">
-          <StatusBadge status={song.status} />
+          <SongStatusToggle songId={song.id} initialStatus={song.status} />
           <Link
             href={`/songs/${song.id}/edit`}
             className="px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"

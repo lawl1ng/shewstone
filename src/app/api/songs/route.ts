@@ -22,6 +22,9 @@ export async function GET(request: NextRequest) {
         ...(search ? { title: { contains: search } } : {}),
       },
       orderBy,
+      include: {
+        practiceNotes: { take: 1, orderBy: { createdAt: "desc" } },
+      },
     });
 
     return NextResponse.json(songs);

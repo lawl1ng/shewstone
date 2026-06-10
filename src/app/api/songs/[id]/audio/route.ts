@@ -40,6 +40,7 @@ export async function POST(
           "application/octet-stream",
         ],
         maximumSizeInBytes: 100 * 1024 * 1024,
+        allowOverwrite: true,
       }),
       onUploadCompleted: async ({ blob }) => {
         const name = decodeURIComponent(blob.pathname.split("/").pop() ?? blob.pathname);

@@ -21,13 +21,21 @@ const badgeStyles: Record<SongStatus, string> = {
     "bg-red-50 text-red-800 ring-1 ring-red-200 dark:bg-red-900/20 dark:text-red-300 dark:ring-red-800",
 };
 
-export function StatusBadge({ status }: { status: SongStatus }) {
+export function StatusBadge({
+  status,
+  alwaysShowLabel,
+}: {
+  status: SongStatus;
+  alwaysShowLabel?: boolean;
+}) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeStyles[status]}`}
+      aria-label={labels[status]}
+      title={labels[status]}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${dotColors[status]}`} />
-      {labels[status]}
+      <span className={alwaysShowLabel ? "" : "hidden sm:inline"}>{labels[status]}</span>
     </span>
   );
 }

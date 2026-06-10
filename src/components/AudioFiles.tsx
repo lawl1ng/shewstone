@@ -26,16 +26,28 @@ export function AudioFiles({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const existing = files.find((f) => f.name === file.name);
+    if (existing && !confirm(`A file named "${file.name}" already exists. Replace it?`)) {
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
     setUploading(true);
     setProgress(0);
     setError(null);
 
     try {
-      await upload(file.name, file, {
+      const blob = await upload(file.name, file, {
         access: "public",
         handleUploadUrl: `/api/songs/${songId}/audio`,
         multipart: true,
         onUploadProgress: ({ percentage }) => setProgress(Math.round(percentage)),
+      });
+
+      await fetch(`/api/songs/${songId}/audio/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: blob.url, pathname: blob.pathname, replaceId: existing?.id }),
       });
 
       const updated: AudioFile[] = await fetch(`/api/songs/${songId}/audio`).then((r) => r.json());
